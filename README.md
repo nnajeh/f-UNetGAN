@@ -2,7 +2,7 @@
 
 
 
-##Abstract:
+## Abstract:
 
 In recent years, there has been a tremendous increase in the use of anomaly detection
 and localization techniques in industrial and medical applications. However, it can be
