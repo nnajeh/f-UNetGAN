@@ -35,7 +35,18 @@ def prepare_plot(origImage, origMask, predMask):
 	# set the layout of the figure and display it
 	figure.tight_layout()
 	figure.show()
-  
+
+	
+	
+## Calculate threshold	
+precision, recall, thresholds = precision_recall_curve(np.asarray(y_true).ravel(), np.asarray(y_score).ravel())
+a = 2 * precision * recall
+b = precision + recall
+f1 = np.divide(a, b, out=np.zeros_like(a), where=b != 0)
+threshold = thresholds[np.argmax(f1)]
+print(threshold)
+
+
 with torch.no_grad():
 for i, (imgs,labels, masks) in enumerate(test_dataloader):   
     
@@ -62,7 +73,7 @@ for i, (imgs,labels, masks) in enumerate(test_dataloader):
         predMask = predMask.cpu().detach().numpy()
         
         # filter out the weak predictions and convert them to integers
-        predMask = (predMask > 0.5) * 255
+        predMask = (predMask > threshold) * 255
         predMask = predMask.astype(np.uint8)
     
 
