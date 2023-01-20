@@ -5,8 +5,22 @@ import torch
 import cv2
 import os
 
+def visualize(**images):
+    """
+    Plot images in one row
+    """
+    n_images = len(images)
+    plt.figure(figsize=(20,8))
+    for idx, (name, image) in enumerate(images.items()):
+        plt.subplot(1, n_images, idx + 1)
+        plt.xticks([]); 
+        plt.yticks([])
+        # get title from the parameter names
+        plt.title(name.replace('_',' ').title(), fontsize=20)
+        plt.imshow(image,cmap='gray')
+    plt.show()
 
-# import the necessary packages
+
 def prepare_plot(origImage, origMask, predMask):
 	# initialize our figure
 	figure, ax = plt.subplots(nrows=1, ncols=3, figsize=(10, 10))
@@ -22,26 +36,23 @@ def prepare_plot(origImage, origMask, predMask):
 	figure.tight_layout()
 	figure.show()
   
-
+with torch.no_grad():
 for i, (imgs,labels, masks) in enumerate(test_dataloader):   
     
         real_img = imgs.to(device)
         mask = masks.to('cuda')
         fake_imgs = pretrained_G(pretrained_E(real_img))
     
-                
-        #encoder Output
+        #Discriminator encoder Output
         real_img_feat,_ = pretrained_D.extract_all_features(real_img)
         fake_img_feat,_ = pretrained_D.extract_all_features(fake_imgs)
                 
     
-        ### Decoder Output
+        ###Discriminator Decoder Output
         _,real_pixel_feat = pretrained_D.extract_all_features(real_img)
         _,fake_pixel_feat = pretrained_D.extract_all_features(fake_imgs)
         
-        #print(real_img_feat[0])
  
-       # feat_distance1 = MSE(f_gx_e, f_x_e)
         anomaly_score=  torch.abs(fake_imgs-real_img)+ torch.mean(torch.abs(fake_pixel_feat - real_pixel_feat))  
         
         # make the prediction, pass the results through the sigmoid
@@ -55,8 +66,6 @@ for i, (imgs,labels, masks) in enumerate(test_dataloader):
         predMask = predMask.astype(np.uint8)
     
 
-
-        #plt.show()
             
         visualize(
            original_image = real_img[0][0].cpu().data.numpy(),
