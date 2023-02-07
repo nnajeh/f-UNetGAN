@@ -12,4 +12,4 @@ trics. The results indicate the effectiveness of the proposed unsupervised GAN-b
 
 
 This is a PyTorch/GPU implementation of the paper [F-UNetGAN : Fast UNET GAN For Unsupervised Anomaly Detection And
-Segmentation : Application to computed tomography scans for Lung diseases]:
+Segmentation : Application to Lung diseases]:
