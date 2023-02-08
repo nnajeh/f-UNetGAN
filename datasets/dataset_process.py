@@ -1,7 +1,6 @@
-from Libraries import *
+from utils.libraries import *
 
 
-data_path= "./new_less_data"
 normalize = transforms.Normalize(mean=[0,0,0], std=[1,1,1])
 
 
@@ -106,5 +105,4 @@ for phase in PHASE_NAMES:
     train_dataset = ProcessDataset(data_path,  phase='train')
     test_dataset = ProcessDataset(data_path,  phase='test')
     
-train_dataloader = DataLoader(train_dataset, batch_size=batch_size,   shuffle=True)
 
