@@ -8,8 +8,7 @@ trics. The results indicate the effectiveness of the proposed unsupervised GAN-b
 
 
 ## Proposed Framework
-![U-F-BigGAN](https://user-images.githubusercontent.com/38373885/213512790-a85d2aec-4e8e-4390-951f-5ae7e16a3492.png)
-
+![F-UNetGAN](https://user-images.githubusercontent.com/38373885/218199301-8fd50b4d-8d07-483e-96df-38c94c056c5e.png)
 
 This is a PyTorch/GPU implementation of the paper [F-UNetGAN : Fast UNET GAN For Unsupervised Anomaly Detection And
 Segmentation : Application to Lung diseases]:
