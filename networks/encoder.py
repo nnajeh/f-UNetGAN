@@ -1,10 +1,10 @@
 
 
-from Libraries import *
-from Dataset import *
-from Spectral_Normalization import *
-from Attention import *
-from Parameters import *
+from utils.libraries import *
+from utils.dataset import *
+from utils.spectral_Normalization import *
+from utils.attention import *
+from utils.parameters import *
 
 
 class Encoder(nn.Module):
