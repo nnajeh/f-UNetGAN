@@ -1,10 +1,10 @@
 
 
-from Libraries import *
-from Dataset import *
-from Spectral_Normalization import *
-from Attention import *
-from Parameters import *
+from utils.Libraries import *
+from utils.Dataset import *
+from utils.Spectral_Normalization import *
+from utils.Attention import *
+from utils.Parameters import *
 
 
 
