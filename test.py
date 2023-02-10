@@ -47,6 +47,7 @@ threshold = thresholds[np.argmax(f1)]
 print(threshold)
 
 
+
 with torch.no_grad():
 for i, (imgs,labels, masks) in enumerate(test_dataloader):   
     
@@ -92,3 +93,17 @@ for i, (imgs,labels, masks) in enumerate(test_dataloader):
         x =plt.imshow(anomaly_score[0][0].cpu().data.numpy(), extent=(-3, 3, 3, -3), interpolation='bilinear', cmap='jet')
         plt.colorbar(x);
 
+
+def au_prc(true_mask, pred_mask):
+
+    # Calculate pr curve and its area
+    precision, recall, threshold = precision_recall_curve(true_mask, pred_mask)
+    au_prc = auc(recall, precision)
+
+    # Search the optimum point and obtain threshold via f1 score
+    f1 = 2 * (precision * recall) / (precision + recall)
+    f1[np.isnan(f1)] = 0
+
+    th = threshold[np.argmax(f1)]
+
+    return au_prc, th
