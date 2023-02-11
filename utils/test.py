@@ -45,23 +45,9 @@ f1 = np.divide(a, b, out=np.zeros_like(a), where=b != 0)
 threshold = thresholds[np.argmax(f1)]
 print(threshold)
 
-def auc_roc(mask, score):
-    """
-    ref: iou https://www.jeremyjordan.me/evaluating-image-segmentation-models/
-    ref: confusion matrix https://stackoverflow.com/questions/31324218/scikit-learn-how-to-obtain-true-positive-true-negative-false-positive-and-fal
-    ref: confusion matrix https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html
-    """
-    mask[mask > 0.5] = 1
-    mask[mask <= 0.5] = 0
-
-    auc_score = roc_auc_score(mask.cpu().ravel(), score.cpu().ravel())
-    fpr, tpr, thresholds = roc_curve(mask.cpu().ravel(), score.cpu().ravel(), pos_label=1)
-
-    return auc_score, [fpr, tpr, thresholds]
 
 
-def rescale(x):
-    return (x - x.min()) / (x.max() - x.min())
+
 
 with torch.no_grad():
 for i, (imgs,labels, masks) in enumerate(test_dataloader):   
