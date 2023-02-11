@@ -298,7 +298,7 @@ class UNet(nn.Module):
         # (64,128,128) --> (1,128,128)
         self.output_layer = nn.Conv2d(filters[0], 1,1,1)  #()
         
-        self.linear = SNLinear(filters[4]*4*4, 1)
+        self.linear = SNLinear(filters[4], 1)
         
         self.activation = nn.LeakyReLU(0.2)
     
@@ -346,7 +346,7 @@ class UNet(nn.Module):
         
     def extract_all_features(self, x):
         features, conv3, conv2, conv1 , conv0 = self.extract_features_encoder(x)
-        feats_encoder = features.view(-1, 1024*4*4)
+        feats_encoder = torch.sum(self.activation(features), [2,3])
 
         feats = self.extract_features_decoder(features, conv3, conv2, conv1, conv0)
 
@@ -362,5 +362,6 @@ class UNet(nn.Module):
 
         #output:(1,128,128)
         output2 = self.output_layer(features)
+        output2 = output2.view(output2.size(0),1,128,128)
 
         return output1, output2  
