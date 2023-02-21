@@ -37,6 +37,59 @@ def prepare_plot(origImage, origMask, predMask):
 
 	
 	
+
+def measure_all(gtsavepath,prepath):
+
+    seg = sitk.GetArrayFromImage(sitk.ReadImage(gtsavepath, sitk.sitkInt16))
+    label = sitk.GetArrayFromImage(sitk.ReadImage(prepath, sitk.sitkInt16))
+
+    #### dice
+    zeros =np.zeros(seg.shape) 
+    ones = np.ones(seg.shape)  
+    tp =((seg == ones) & (label == ones)).sum()
+    fp=((seg==zeros) & (label==ones)).sum()
+    tn=((seg==zeros) & (label==zeros)).sum()
+    fn=((seg==ones) & (label==zeros)).sum()
+    core=0.000000000000000001
+    dice = (tp*2)/(fp+tp*2+fn)
+    # mcc = (tp*tn-fp*fn)/(((tp+fp+core)*(tp+fn+core)*(tn+fp+core)*(tn+fn+core))**0.5)
+    acc=(tp+tn+core)/(tp+fp+tn+fn+core)
+    precision=(tp+core)/(tp+fp+core)
+    recall_sen=(tp+core)/(tp+fn+core)
+    spc=(tn+core)/(tn+fp+core)
+    jac = tp/(fp+tp+fn)
+    #### hausdorff
+    quality = dict()
+    seg1 = sitk.ReadImage(gtsavepath, sitk.sitkInt16)
+    label1 = sitk.ReadImage(prepath, sitk.sitkInt16)
+    hausdorffcomputer = sitk.HausdorffDistanceImageFilter()
+    if ((sitk.GetArrayFromImage(seg1).sum() > 0) and (sitk.GetArrayFromImage(label1).sum() > 0)):
+        hausdorffcomputer.Execute(seg1, label1)  # (labelTrue > 0.5, labelPred > 0.5)
+        quality["avgHausdorff"] = hausdorffcomputer.GetAverageHausdorffDistance()
+        quality["Hausdorff"] = hausdorffcomputer.GetHausdorffDistance()
+    else:
+        quality["avgHausdorff"] = "max"
+        quality["Hausdorff"] = "max"
+
+    with open(r"D:\TGN_AVP_FVN\CODE\CNTSeg\final_results\result1_excel\LOSS\dice_FVN.txt", 'a+') as f:
+        f.writelines("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\n".format(prediction,dice,jac,acc,precision,recall_sen,spc,quality["Hausdorff"],quality["avgHausdorff"]))
+    print("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\n".format(prediction,dice,jac,acc,precision,recall_sen,spc,quality["Hausdorff"],quality["avgHausdorff"]))
+
+
+def au_prc(true_mask, pred_mask):
+
+    # Calculate pr curve and its area
+    precision, recall, threshold = precision_recall_curve(true_mask, pred_mask)
+    au_prc = auc(recall, precision)
+
+    # Search the optimum point and obtain threshold via f1 score
+    f1 = 2 * (precision * recall) / (precision + recall)
+    f1[np.isnan(f1)] = 0
+
+    th = threshold[np.argmax(f1)]
+
+    return au_prc, th
+
 ## Calculate threshold	
 precision, recall, thresholds = precision_recall_curve(np.asarray(y_true).ravel(), np.asarray(y_score).ravel())
 a = 2 * precision * recall
@@ -95,16 +148,3 @@ for i, (imgs,labels, masks) in enumerate(test_dataloader):
         plt.colorbar(x);
 
 
-def au_prc(true_mask, pred_mask):
-
-    # Calculate pr curve and its area
-    precision, recall, threshold = precision_recall_curve(true_mask, pred_mask)
-    au_prc = auc(recall, precision)
-
-    # Search the optimum point and obtain threshold via f1 score
-    f1 = 2 * (precision * recall) / (precision + recall)
-    f1[np.isnan(f1)] = 0
-
-    th = threshold[np.argmax(f1)]
-
-    return au_prc, th
