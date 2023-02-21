@@ -14,7 +14,6 @@ for epoch in range(start_epoch, n_epochs):
     D.train()
     
 
-
     d_losses = []
     g_losses = []
     
@@ -24,7 +23,6 @@ for epoch in range(start_epoch, n_epochs):
         imgs, _ = mixup_data(imgs, imgs, alpha=0.4)
         real_imgs = imgs.to(device)
         
-
         # ---------------------
         #  Train Discriminator
         # ---------------------
@@ -38,10 +36,19 @@ for epoch in range(start_epoch, n_epochs):
         
 
         # Gradient penalty Loss
-        gradient_penalty = compute_gradient_penalty(D, real_imgs.data, fake_imgs.data)
+        gradient_penalty_enc = compute_gradient_penalty_enc(D, real_imgs.data, fake_imgs.data)
+        gradient_penalty_dec = compute_gradient_penalty_dec(D, real_imgs.data, fake_imgs.data)
 
-        # Adversarial loss
-        train_d_loss = torch.mean(fake_validity) - torch.mean(real_validity) + torch.mean(fake_validity_xy.sum(dim=(-2,-1))) -  torch.mean(real_validity_xy.sum(dim=(-2,-1))) +  lambda_gp *  gradient_penalty
+        
+        # Encoder loss
+        train_d_loss_enc = torch.mean(fake_validity) - torch.mean(real_validity) + lambda_gp *  gradient_penalty_enc
+        
+        # Decoder loss
+        train_d_loss_dec = torch.mean(fake_validity_xy.sum(dim=(-2,-1))) -  torch.mean(real_validity_xy.sum(dim=(-2,-1))) +  lambda_gp *  gradient_penalty_dec
+        
+        # Discriminator loss
+        train_d_loss = train_d_loss_enc + train_d_loss_dec
+        
         
         train_d_loss.backward() #
         optimizer_D.step()
@@ -56,7 +63,8 @@ for epoch in range(start_epoch, n_epochs):
             fake_imgs = G(z)
             
             fake_validity, fake_validity_xy = D(fake_imgs)
-           
+            
+            #Generator Loss
             train_g_loss = - torch.mean(fake_validity) -torch.mean(fake_validity_xy.sum(dim=(-2,-1)))
 
 
@@ -99,7 +107,6 @@ for epoch in range(start_epoch, n_epochs):
     if epoch % 50 == 0 and epoch != 0:
             torch.save(G.module.state_dict(),  f"./gen-{epoch}.pth")
             torch.save(D.module.state_dict(),  f"./disc-{epoch}.pth")  
-            
             
             plt.figure(figsize=(20,5))
             plt.subplot(1,2,1)
