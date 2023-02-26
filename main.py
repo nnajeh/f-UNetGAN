@@ -4,6 +4,8 @@ from utils.spectral_Normalization import *
 from utils.attention import *
 from utils.parameters import *
 
+train_total_e_losses, val_total_e_losses = [],[]
+min_valid_loss_e = np.inf
 
 for epoch in range(start_epoch, n_epochs):
     
@@ -122,8 +124,6 @@ for epoch in range(start_epoch, n_epochs):
             
             
 
-train_total_e_losses, val_total_e_losses = [],[]
-min_valid_loss_e = np.inf
 for e in range(10000):
         e_running_loss =0.0
         losses = []
