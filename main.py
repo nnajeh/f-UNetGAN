@@ -119,3 +119,58 @@ for epoch in range(start_epoch, n_epochs):
             plt.savefig(f'./Training_Losses-{epoch}.png')
             plt.show()            
             
+            
+            
+
+train_total_e_losses, val_total_e_losses = [],[]
+min_valid_loss_e = np.inf
+for e in range(10000):
+        e_running_loss =0.0
+        losses = []
+        E.train()
+      
+        for i, (x, _, _) in enumerate(train_dataloader,0):
+            x = x.to(device, dtype=torch.float)
+
+            code = E(x)
+       
+            rec_image = pretrained_G(code)
+        
+            d_input = torch.cat((x, rec_image), dim=0)
+
+            
+            feat_x_enc, feat_x_dec = pretrained_D(x)
+            feat_gx_enc, feat_gx_dec = pretrained_D(rec_image.detach())
+        
+
+        
+            train_loss = MSE(rec_image, x) +  (MSE(feat_gx_enc, feat_x_enc)+ MSE_pixel(feat_gx_dec, feat_x_dec))
+          
+
+            optimizer_E.zero_grad()
+            train_loss.backward()
+            optimizer_E.step()
+            
+            losses.append(train_loss.item())
+            e_running_loss += train_loss.item()
+        
+        train_total_e_losses.append(np.mean(losses))
+        
+            
+        save_image(d_input*0.5+0.5, './rec'+str(e)+'.bmp')
+
+        epoch_len = len(str(e))
+        print(f"[{e:>{epoch_len}}/{e:>{epoch_len}}] "
+              f"[E_Train_Loss: {train_loss.item()}]"
+
+             )
+        
+        
+        ##### Affichage des images
+        image_check(rec_image.cpu())
+ 
+        #save models
+        if e%50 ==0 and e!=0:
+            torch.save(E.state_dict(), f"./E-{e}.pth")
+
+            
