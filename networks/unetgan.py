@@ -94,7 +94,7 @@ class Generator(nn.Module):
 ## Discriminator
     
    
-##Discriminator Unet
+##Residual Discriminator Unet
 class UNet(nn.Module):
     def __init__(self, channel= 3, filters=[64, 128, 256, 512, 1024], bn=None,  attention=True,  D_init='ortho', dim=64):
         super(UNet, self).__init__()
