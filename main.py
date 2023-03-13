@@ -22,9 +22,10 @@ for epoch in range(start_epoch, n_epochs):
 
     for i,(imgs,_,_) in enumerate (train_dataloader):
         
-        imgs, _ = mixup_data(imgs, imgs, alpha=0.4)
+        #imgs, _ = mixup_data(imgs, imgs, alpha=0.4)
         real_imgs = imgs.to(device)
-        
+        lam = torch.rand(real_imgs.size(0), 1, 1, 1).to(device)
+
         # ---------------------
         #  Train Discriminator
         # ---------------------
@@ -32,24 +33,24 @@ for epoch in range(start_epoch, n_epochs):
         z = torch.Tensor(np.random.normal(0, 1, (imgs.shape[0], latent_dim))).to(device)
 
         fake_imgs = G(z)
+        mixed_inputs = lam * real_imgs + (1 - lam) * fake_imgs
+
 
         real_validity, real_validity_xy = D(real_imgs)
         fake_validity, fake_validity_xy  = D(fake_imgs)
-        
+        mix_outputs = D(mixed_inputs)
 
-        # Gradient penalty Loss
+
         gradient_penalty_enc = compute_gradient_penalty_enc(D, real_imgs.data, fake_imgs.data)
         gradient_penalty_dec = compute_gradient_penalty_dec(D, real_imgs.data, fake_imgs.data)
 
+        mix_loss = torch.mean((mix_outputs - ((1 - lam) * D(fake_imgs) + lam * D(real_imgs))) ** 2)
+
+        train_d_loss_enc = torch.mean(fake_validity) - torch.mean(real_validity) + lambda_gp *  gradient_penalty_enc 
         
-        # Encoder loss
-        train_d_loss_enc = torch.mean(fake_validity) - torch.mean(real_validity) + lambda_gp *  gradient_penalty_enc
-        
-        # Decoder loss
         train_d_loss_dec = torch.mean(fake_validity_xy.sum(dim=(-2,-1))) -  torch.mean(real_validity_xy.sum(dim=(-2,-1))) +  lambda_gp *  gradient_penalty_dec
         
-        # Discriminator loss
-        train_d_loss = train_d_loss_enc + train_d_loss_dec
+        train_d_loss = train_d_loss_enc + train_d_loss_dec + lambda * mix_loss
         
         
         train_d_loss.backward() #
@@ -57,9 +58,7 @@ for epoch in range(start_epoch, n_epochs):
         
         
         if i % n_critic == 0:
-            # -----------------
-            #  Train Generator
-            # -----------------
+
             G.zero_grad()
             
             fake_imgs = G(z)
@@ -82,11 +81,9 @@ for epoch in range(start_epoch, n_epochs):
     d_train_loss = np.average(d_losses)
     g_train_loss = np.average(g_losses)
     
-    #loss  inf function of epochs
     train_total_g_losses.append(g_train_loss)
     train_total_d_losses.append(d_train_loss)
                 
-
 
     epoch_len = len(str(n_epochs))
 
@@ -166,10 +163,8 @@ for e in range(10000):
              )
         
         
-        ##### Affichage des images
         image_check(rec_image.cpu())
  
-        #save models
         if e%50 ==0 and e!=0:
             torch.save(E.state_dict(), f"./E-{e}.pth")
 
