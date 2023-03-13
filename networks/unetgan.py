@@ -33,26 +33,24 @@ class Generator(nn.Module):
         self.g_blocks = nn.ModuleList([
                 nn.ModuleList([
                     GResidualBlock( 16 * base_channels, 16 * base_channels),
+                    CBAMBlock(16* base_channels),
                 ]),
                 nn.ModuleList([
                     GResidualBlock( 16 * base_channels, 8 * base_channels),
+                    CBAMBlock(8* base_channels),
                 ]),
-            
                 nn.ModuleList([
                     GResidualBlock( 8 * base_channels, 4 * base_channels),
+                    CBAMBlock(1* base_channels),
                 ]),
                 nn.ModuleList([
                     GResidualBlock( 4 * base_channels, 2 * base_channels),
                     CBAMBlock(2* base_channels),
-
-
                 ]),
                 nn.ModuleList([
                     GResidualBlock(2 * base_channels, 1* base_channels),
-                    CBAMBlock(1* base_channels),
-
+                    CBAMBlock(1* base_channels)
                 ])
-           
         ])
         
         # Using non-spectral Norm
@@ -63,22 +61,10 @@ class Generator(nn.Module):
             
         )
         
-
-    
-    
     def forward(self, z):
-        '''
-        z: random noise with size self.z_dim
-        y: class embeddings with size self.shared_dim
-            = NOTE =
-            y should be class embeddings from self.shared_emb, not the raw class labels
-        '''
-        #First Linear Layer
         h = self.proj_z(z.contiguous())
         h = h.view(-1,1024, 4, 4)
-        
-
-
+       
         # Loop over blocks
         for index, blocklist in enumerate(self.g_blocks):
             # Second inner loop in case block has multiple layers
