@@ -44,7 +44,7 @@ for epoch in range(start_epoch, n_epochs):
         gradient_penalty_enc = compute_gradient_penalty_enc(D, real_imgs.data, fake_imgs.data)
         gradient_penalty_dec = compute_gradient_penalty_dec(D, real_imgs.data, fake_imgs.data)
 
-        mix_loss = torch.mean((mix_outputs - ((1 - lam) * D(fake_imgs) + lam * D(real_imgs))) ** 2)
+        mix_loss = torch.mean((mix_outputs - ((1 - lam) * fake_validity_xy + lam * real_validity_xy)) ** 2)
 
         train_d_loss_enc = torch.mean(fake_validity) - torch.mean(real_validity) + lambda_gp *  gradient_penalty_enc 
         
