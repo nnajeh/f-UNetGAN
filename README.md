@@ -11,4 +11,4 @@ In this paper, we propose f-UNetGAN, a novel GAN-based fast residual attention n
 ## Proposed Framework
 ![Full-Framework](https://user-images.githubusercontent.com/38373885/222929562-dc5ef22e-cb7a-4c92-8201-38a8ff15fed0.png)
 
-This is a PyTorch/GPU implementation of the paper [f-RANet : A Fast Residual Attention Network for Fine-grained Unsupervised Anomaly Detection and Localization]:
+This is a PyTorch/GPU implementation of the paper [f-UNetGAN : A Fast Residual Attention Network for Fine-grained Unsupervised Anomaly Detection and Localization]:
