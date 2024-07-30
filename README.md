@@ -7,6 +7,6 @@ In recent years, unsupervised anomaly detection has gained a momentum tremendous
  
 
 ## Proposed Framework
-![Framework](![GraphicalAbstract](https://github.com/user-attachments/assets/c18b9dd5-9196-4d2c-888a-9cd93b849d7f))
+![GraphicalAbstract](https://github.com/user-attachments/assets/ceab6eaf-4ef9-49bd-b541-32fb545bb026)
 
 This is a PyTorch/GPU implementation of the paper [f-UNetGAN : A Fast Residual Attention Network for Fine-grained Unsupervised Anomaly Detection and Localization]
