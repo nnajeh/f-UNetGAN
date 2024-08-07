@@ -26,6 +26,10 @@ This is a PyTorch/GPU implementation of the paper [f-UNetGAN : A Fast Residual A
 <img src="https://github.com/user-attachments/assets/991785f3-a665-42de-a19a-cde0b2934eba" alt="COVID-Heatmap" width="300" />
 
 ### MVTEC-AD benchmarking dataset:
-<img src="https://github.com/user-attachments/assets/eb6a7e6f-c19c-42bc-83dd-5b319b709c71" alt="full-heatmap-MVTEC" width="300" />
+#### Bottle object:
+##### <img src="https://github.com/user-attachments/assets/eb6a7e6f-c19c-42bc-83dd-5b319b709c71" alt="full-heatmap-MVTEC" width="300" />
+
+#### Carpet Texture:
+##### <img src="https://github.com/user-attachments/assets/a22479f9-6bb1-46d5-987e-4fc8f6b0a04c" alt="full-heatmap-MVTEC" width="300" />
 
 
