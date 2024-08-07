@@ -23,7 +23,9 @@ This is a PyTorch/GPU implementation of the paper [f-UNetGAN : A Fast Residual A
 
 ## Results
 ### COVID-19 dataset:
-![COVID-Heatmap](https://github.com/user-attachments/assets/991785f3-a665-42de-a19a-cde0b2934eba)
+![COVID-Heatmap]<img src="https://github.com/user-attachments/assets/991785f3-a665-42de-a19a-cde0b2934eba" width="500" />
+
+
 
 ### MVTEC-AD benchmarking dataset:
 ![full-heatmap-MVTEC](https://github.com/user-attachments/assets/eb6a7e6f-c19c-42bc-83dd-5b319b709c71)
