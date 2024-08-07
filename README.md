@@ -20,13 +20,12 @@ In recent years, unsupervised anomaly detection has gained a momentum tremendous
 ![GraphicalAbstract](https://github.com/user-attachments/assets/ceab6eaf-4ef9-49bd-b541-32fb545bb026)
 
 This is a PyTorch/GPU implementation of the paper [f-UNetGAN : A Fast Residual Attention Network for Fine-grained Unsupervised Anomaly Detection and Localization]
-
 ## Results
+
 ### COVID-19 dataset:
-![COVID-Heatmap]<img src="https://github.com/user-attachments/assets/991785f3-a665-42de-a19a-cde0b2934eba" width="300" />
-
-
+<img src="https://github.com/user-attachments/assets/991785f3-a665-42de-a19a-cde0b2934eba" alt="COVID-Heatmap" width="300" />
 
 ### MVTEC-AD benchmarking dataset:
-![full-heatmap-MVTEC]<img src="https://github.com/user-attachments/assets/eb6a7e6f-c19c-42bc-83dd-5b319b709c71" width="300" />
+<img src="https://github.com/user-attachments/assets/eb6a7e6f-c19c-42bc-83dd-5b319b709c71" alt="full-heatmap-MVTEC" width="300" />
+
 
