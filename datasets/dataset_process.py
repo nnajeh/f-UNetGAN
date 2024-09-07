@@ -79,18 +79,6 @@ class ProcessDataset(Dataset):
 
             img_fpath_list = sorted([os.path.join(img_type_dir, f) for f in os.listdir(img_type_dir) ])
 
-            x.extend(img_fpath_list)
-                # load gt labels
-
-            if img_type == 'normal':
-                y.extend([0] * len(img_fpath_list))
-                mask.extend([None] * len(img_fpath_list))
-            
-            else:
-                y.extend([1] * len(img_fpath_list))
-                
-                gt_type_dir = os.path.join(gt_dir, img_type)
-                #img_fname_list = [os.path.splitext(os.path.basename(f))[0] for f in img_fpath_list]
                 
                 #gt_fpath_list = [os.path.join(gt_type_dir, img_fname + '_mask.png') for img_fname in img_fname_list]
                 gt_fpath_list = sorted([os.path.join(gt_type_dir, d) for d in os.listdir(gt_type_dir) ])
