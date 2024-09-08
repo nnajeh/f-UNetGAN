@@ -33,3 +33,14 @@ This is a PyTorch/GPU implementation of the paper [f-UNetGAN : A Fast Residual A
 ##### <img src="https://github.com/user-attachments/assets/a22479f9-6bb1-46d5-987e-4fc8f6b0a04c" alt="full-heatmap-MVTEC" width="300" />
 
 
+This is a PyTorch/GPU implementation of the paper [A fast residual attention network for fine-grained unsupervised anomaly detection and localization]:
+```
+@article{nafti2024fast,
+  title={A fast residual attention network for fine-grained unsupervised anomaly detection and localization},
+  author={Nafti, Najeh and Besbes, Olfa and Abdallah, Asma Ben and Vacavant, Antoine and Bedoui, Mohamed Hedi},
+  journal={Applied Soft Computing},
+  pages={112066},
+  year={2024},
+  publisher={Elsevier}
+}
+```
